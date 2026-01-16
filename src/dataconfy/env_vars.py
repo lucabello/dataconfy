@@ -121,7 +121,9 @@ def flatten_dataclass_fields(
         field_path = f"{prefix}.{field.name}" if prefix else field.name
 
         # Unwrap Optional if needed
-        field_type, is_optional = _unwrap_optional(field.type)
+        from typing import cast
+
+        field_type, is_optional = _unwrap_optional(cast(Type, field.type))
 
         # Check if field is a nested dataclass
         if is_dataclass(field_type):
@@ -301,7 +303,7 @@ def _reconstruct_nested_dict(flat_data: Dict[str, Any]) -> Dict[str, Any]:
 def load_from_env(
     dataclass_type: Type,
     env_prefix: str,
-    environ: Optional[Dict[str, str]] = None,
+    environ: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """
     Load dataclass values from environment variables.

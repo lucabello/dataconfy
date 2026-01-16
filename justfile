@@ -36,7 +36,7 @@ format:
 # Run tests
 [group("dev")]
 test:
-    uv run pytest
+    uv run pytest --cov=src/dataconfy --cov-report=term-missing
 
 # Build the project
 [group("build")]

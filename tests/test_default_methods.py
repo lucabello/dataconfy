@@ -6,7 +6,7 @@ from dataconfy import ConfigManager, DataManager
 
 
 @dataclass
-class TestData:
+class SampleData:
     """Test dataclass."""
 
     value: int = 42
@@ -23,7 +23,7 @@ class TestDefaultFilenameInAllMethods:
         assert not config.exists()
 
         # Save with default
-        config.save(TestData())
+        config.save(SampleData())
 
         # Should exist now using default
         assert config.exists()
@@ -45,7 +45,7 @@ class TestDefaultFilenameInAllMethods:
         assert not data.exists()
 
         # Save with default
-        data.save(TestData())
+        data.save(SampleData())
 
         # Should exist now using default
         assert data.exists()
@@ -63,7 +63,7 @@ class TestDefaultFilenameInAllMethods:
         """Test that explicit filename still works with exists()."""
         config = ConfigManager(app_name="testapp", config_dir=tmp_path)
 
-        config.save(TestData(), "custom.yaml")
+        config.save(SampleData(), "custom.yaml")
 
         assert config.exists("custom.yaml")
         assert not config.exists("other.yaml")
@@ -80,7 +80,7 @@ class TestDefaultFilenameInAllMethods:
     def test_workflow_all_defaults(self, tmp_path):
         """Test complete workflow using only defaults."""
         config = ConfigManager(app_name="testapp", config_dir=tmp_path)
-        test_data = TestData(value=100)
+        test_data = SampleData(value=100)
 
         # Check doesn't exist
         assert not config.exists()
@@ -97,5 +97,5 @@ class TestDefaultFilenameInAllMethods:
         assert config.exists()
 
         # Load with default
-        loaded = config.load(TestData)
+        loaded = config.load(SampleData)
         assert loaded.value == 100

@@ -5,7 +5,7 @@ license-files = ["LICENSE"]
 authors = [
     {name = "Luca Bello", email = "lusgabello@gmail.com"}
 ]
-description = "Persist dataclass-based app config/data to disk (YAML/JSON) following XDG conventions, with simple load/save API."
+description = "Type-safe configuration and data persistence using Python dataclasses with YAML/JSON serialization, XDG directory conventions, and environment variable support."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

@@ -253,8 +253,10 @@ class BaseFileManager(ABC):
             # If the field type is a dataclass and value is a dict, instantiate it
             if is_dataclass(field_type) and isinstance(value, dict):
                 # Recursively instantiate nested dataclass
-                nested_data = self._instantiate_nested_dataclasses(field_type, value)
-                result[key] = field_type(**nested_data)
+                from typing import cast
+
+                nested_data = self._instantiate_nested_dataclasses(cast(Type, field_type), value)
+                result[key] = field_type(**nested_data)  # type: ignore[misc]
             else:
                 result[key] = value
 
