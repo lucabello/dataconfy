@@ -123,7 +123,7 @@ def flatten_dataclass_fields(
         # Unwrap Optional if needed
         from typing import cast
 
-        field_type, is_optional = _unwrap_optional(cast(Type, field.type))
+        field_type, _ = _unwrap_optional(cast(Type, field.type))
 
         # Check if field is a nested dataclass
         if is_dataclass(field_type):
@@ -364,19 +364,3 @@ def load_from_env(
     nested_values = _reconstruct_nested_dict(flat_values)
 
     return nested_values
-
-
-def detect_name_collisions(dataclass_type: Type) -> None:
-    """
-    Detect and raise error for environment variable name collisions.
-
-    This is called during load to validate the dataclass structure.
-
-    Args:
-        dataclass_type: The dataclass type to validate
-
-    Raises:
-        EnvVarError: If name collision is detected
-    """
-    # flatten_dataclass_fields already detects collisions and raises EnvVarError
-    flatten_dataclass_fields(dataclass_type)

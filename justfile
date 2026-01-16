@@ -22,6 +22,8 @@ lint:
     uv run ruff check
     # Run static checks
     uv run pyright src
+    # Check for dead code
+    uv run vulture src --min-confidence 80
 
 # Format the codebase using ruff
 [group("dev")]
