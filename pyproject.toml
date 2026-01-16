@@ -1,39 +1,17 @@
-[build-system]
-requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "dataconfy"
 version = "0.1.0"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Luca Bello", email = "lusgabello@gmail.com"}
+]
 description = "Persist dataclass-based app config/data to disk (YAML/JSON) following XDG conventions, with simple load/save API."
 readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-authors = [
-    {name = "Luca Bello", email = "luca@example.com"}
-]
-keywords = ["config", "dataclasses", "configuration", "yaml", "json", "xdg"]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
+requires-python = ">=3.10"
 dependencies = [
-    "platformdirs>=3.0.0",
-    "PyYAML>=6.0",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
+    "platformdirs>=4.5.0",
+    "pyyaml>=6.0.3",
 ]
 
 [project.urls]
@@ -41,14 +19,32 @@ Homepage = "https://github.com/lucabello/dataconfy"
 Repository = "https://github.com/lucabello/dataconfy"
 Issues = "https://github.com/lucabello/dataconfy/issues"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pyright>=1.1.406",
+    "ruff>=0.14.0",
+]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[build-system]
+requires = ["uv_build>=0.9.2,<0.10.0"]
+build-backend = "uv_build"
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[tool.ruff]
+line-length = 99
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+
+[lint.pydocstyle]
+convention = "google"
