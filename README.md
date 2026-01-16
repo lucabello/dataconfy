@@ -1,5 +1,12 @@
 # dataconfy
 
+[![PyPi Release](https://img.shields.io/pypi/v/dataconfy?label=PyPi&color=blue)](https://pypi.org/project/dataconfy/)
+[![GitHub Release](https://img.shields.io/github/v/release/lucabello/dataconfy?label=GitHub&color=blue)](https://github.com/lucabello/dataconfy/releases)
+[![Publish to PyPi](https://github.com/lucabello/dataconfy/actions/workflows/publish.yaml/badge.svg)](https://github.com/lucabello/dataconfy/actions/workflows/publish.yaml)
+![Commits Since Release](https://img.shields.io/github/commits-since/lucabello/dataconfy/latest?label=Commits%20since%20last%20release&color=darkgreen)
+
+
+
 **Effortless configuration and data persistence for Python applications.**
 
 `dataconfy` is a lightweight Python library that transforms your dataclasses into persistent configuration and data stores. It seamlessly handles file serialization (YAML/JSON), follows XDG directory conventions for cross-platform compatibility, and supports environment variable overrides for cloud-native deployments—all with a simple, intuitive API.
