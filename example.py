@@ -8,6 +8,7 @@ configuration data using dataclasses.
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, Any, Optional
 import dataconfy
 
 
@@ -25,7 +26,7 @@ class UserData:
     """Example user data."""
     username: str = "user"
     email: str = "user@example.com"
-    preferences: dict = None
+    preferences: Optional[Dict[str, Any]] = None
     
     def __post_init__(self):
         if self.preferences is None:

@@ -9,7 +9,7 @@ import json
 import os
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
-from typing import Type, TypeVar, Optional, Union
+from typing import Any, Type, TypeVar, Optional, Union
 
 import yaml
 from platformdirs import user_config_dir, user_data_dir
@@ -106,7 +106,7 @@ class Config:
                 f"Unsupported file extension: {ext}. Use .yaml, .yml, or .json"
             )
     
-    def _serialize(self, obj: any, format: str) -> str:
+    def _serialize(self, obj: Any, format: str) -> str:
         """Serialize a dataclass instance to string."""
         if not is_dataclass(obj):
             raise InvalidDataclassError(
@@ -144,7 +144,7 @@ class Config:
     
     def save_config(
         self,
-        obj: any,
+        obj: Any,
         filename: str,
         format: Optional[str] = None,
     ) -> Path:
@@ -205,7 +205,7 @@ class Config:
     
     def save_data(
         self,
-        obj: any,
+        obj: Any,
         filename: str,
         format: Optional[str] = None,
     ) -> Path:

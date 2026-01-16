@@ -4,6 +4,7 @@ import json
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, Any, Optional
 
 import pytest
 import yaml
@@ -23,7 +24,7 @@ class SampleConfig:
 class NestedConfig:
     """Configuration with nested data."""
     title: str = "Nested"
-    settings: dict = None
+    settings: Optional[Dict[str, Any]] = None
     
     def __post_init__(self):
         if self.settings is None:
