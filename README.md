@@ -178,9 +178,28 @@ Config(app_name: str, config_dir: Optional[Path] = None, data_dir: Optional[Path
 
 ## Requirements
 
-- Python 3.8+
-- `platformdirs` >= 3.0.0
-- `PyYAML` >= 6.0
+- Python 3.10+
+- `platformdirs` >= 4.5.0
+- `PyYAML` >= 6.0.3
+
+## Development
+
+If you want to contribute to the project, please start by opening an [issue](https://github.com/lucabello/dataconfy/issues).
+
+You can interact with the project via `uv` and the `justfile` (from [casey/just](https://github.com/casey/just)) at the root of the repository. Simply run `just` to show the available recipes.
+
+```bash
+# Create a virtual environment for the project
+uv sync
+
+# Linting, formatting, and testing
+just          # show the list of all commands
+just check    # run all quality checks (format, lint, test)
+just format   # format the code
+just lint     # lint the code
+just test     # run tests
+just build    # build the project
+```
 
 ## License
 

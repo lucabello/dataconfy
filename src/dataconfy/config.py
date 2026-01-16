@@ -8,7 +8,7 @@ YAML or JSON files, with automatic path management using XDG conventions via pla
 import json
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
-from typing import Any, Type, TypeVar, Optional, Union
+from typing import Any, Optional, Type, TypeVar, Union
 
 import yaml
 from platformdirs import user_config_dir, user_data_dir
