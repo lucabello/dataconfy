@@ -3,10 +3,11 @@
 Example usage of dataconfy library.
 
 This script demonstrates how to use dataconfy to save and load
-configuration data using dataclasses.
+configuration data using dataclasses, including environment variable support.
 """
 
-from dataclasses import dataclass
+import os
+from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 import dataconfy
@@ -23,16 +24,33 @@ class AppConfig:
 
 
 @dataclass
+class DatabaseConfig:
+    """Example database configuration with nested structure."""
+
+    host: str = "localhost"
+    port: int = 5432
+    database: str = "myapp"
+    username: str = "user"
+
+
+@dataclass
+class AppConfigWithDatabase:
+    """Application config with nested database configuration."""
+
+    app_name: str = "MyApp"
+    debug: bool = False
+    database: DatabaseConfig = field(default_factory=DatabaseConfig)
+    # Custom env var name example
+    api_key: str = field(default="", metadata={"env": "SECRET_API_KEY"})
+
+
+@dataclass
 class UserData:
     """Example user data."""
 
     username: str = "user"
     email: str = "user@example.com"
     preferences: Optional[Dict[str, Any]] = None
-
-    def __post_init__(self):
-        if self.preferences is None:
-            self.preferences = {}
 
 
 def main():
@@ -42,11 +60,12 @@ def main():
     print("=" * 60)
     print()
 
-    # Initialize config manager
-    config = dataconfy.Config(app_name="example_app")
+    # Initialize managers
+    config_manager = dataconfy.ConfigManager(app_name="example_app")
+    data_manager = dataconfy.DataManager(app_name="example_app")
 
-    print(f"Config directory: {config.config_dir}")
-    print(f"Data directory:   {config.data_dir}")
+    print(f"Config directory: {config_manager.config_dir}")
+    print(f"Data directory:   {data_manager.data_dir}")
     print()
 
     # Example 1: Save and load YAML config
@@ -57,11 +76,11 @@ def main():
     print(f"Created config: {app_config}")
 
     # Save to YAML
-    config_path = config.save_config(app_config, "settings.yaml")
+    config_path = config_manager.save(app_config, "settings.yaml")
     print(f"Saved to: {config_path}")
 
     # Load from YAML
-    loaded_config = config.load_config(AppConfig, "settings.yaml")
+    loaded_config = config_manager.load(AppConfig, "settings.yaml")
     print(f"Loaded config: {loaded_config}")
     print()
 
@@ -77,20 +96,20 @@ def main():
     print(f"Created data: {user_data}")
 
     # Save to JSON
-    data_path = config.save_data(user_data, "user.json")
+    data_path = data_manager.save(user_data, "user.json")
     print(f"Saved to: {data_path}")
 
     # Load from JSON
-    loaded_data = config.load_data(UserData, "user.json")
+    loaded_data = data_manager.load(UserData, "user.json")
     print(f"Loaded data: {loaded_data}")
     print()
 
     # Example 3: Check file existence
     print("3. Checking file existence:")
     print("-" * 60)
-    print(f"settings.yaml exists: {config.config_file_exists('settings.yaml')}")
-    print(f"user.json exists: {config.data_file_exists('user.json')}")
-    print(f"missing.yaml exists: {config.config_file_exists('missing.yaml')}")
+    print(f"settings.yaml exists: {config_manager.exists('settings.yaml')}")
+    print(f"user.json exists: {data_manager.exists('user.json')}")
+    print(f"missing.yaml exists: {config_manager.exists('missing.yaml')}")
     print()
 
     # Example 4: Show file contents
@@ -102,6 +121,50 @@ def main():
 
     print("JSON content:")
     print(data_path.read_text())
+
+    # Example 5: Environment variables support
+    print("\n5. Environment variables support:")
+    print("-" * 60)
+
+    # Set some environment variables
+    os.environ["MYAPP_DATABASE_HOST"] = "prod.example.com"
+    os.environ["MYAPP_DATABASE_PORT"] = "3306"
+    os.environ["MYAPP_DEBUG"] = "true"
+    os.environ["MYAPP_SECRET_API_KEY"] = "secret-key-from-env"
+
+    # Create config manager with env vars enabled
+    config_with_env = dataconfy.ConfigManager(
+        app_name="myapp",
+        use_env_vars=True,
+    )
+
+    # Save a config file with default values
+    default_config = AppConfigWithDatabase(
+        app_name="MyApp",
+        debug=False,
+        database=DatabaseConfig(host="localhost", port=5432),
+        api_key="default-key",
+    )
+    env_config_path = config_with_env.save(default_config, "app_config.yaml")
+    print(f"Saved config to: {env_config_path}")
+    print(f"File content:\n{env_config_path.read_text()}")
+
+    # Load will merge env vars with file values (env vars take priority)
+    loaded_with_env = config_with_env.load(AppConfigWithDatabase, "app_config.yaml")
+    print("\nLoaded config (with env var overrides):")
+    print(f"  app_name: {loaded_with_env.app_name} (from file)")
+    print(f"  debug: {loaded_with_env.debug} (from env: MYAPP_DEBUG)")
+    print(f"  database.host: {loaded_with_env.database.host} (from env: MYAPP_DATABASE_HOST)")
+    print(f"  database.port: {loaded_with_env.database.port} (from env: MYAPP_DATABASE_PORT)")
+    print(f"  database.database: {loaded_with_env.database.database} (from file)")
+    print(f"  api_key: {loaded_with_env.api_key} (from env: MYAPP_SECRET_API_KEY)")
+
+    # Clean up environment variables
+    del os.environ["MYAPP_DATABASE_HOST"]
+    del os.environ["MYAPP_DATABASE_PORT"]
+    del os.environ["MYAPP_DEBUG"]
+    del os.environ["MYAPP_SECRET_API_KEY"]
+    print()
 
     print("=" * 60)
     print("Example completed successfully!")
